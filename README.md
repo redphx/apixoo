@@ -18,7 +18,8 @@ from apixoo import APIxoo, GalleryCategory, GalleryDimension
 EMAIL = 'em@il.com'
 MD5_PASSWORD = 'deadc0ffee...'
 
-api = APIxoo(EMAIL, md5_password=MD5_PASSWORD)  # Also accept password string with "password='password'"
+# Also accept password string with "password='password'"
+api = APIxoo(EMAIL, md5_password=MD5_PASSWORD)
 status = api.log_in()
 if not status:
     print('Login error!')
