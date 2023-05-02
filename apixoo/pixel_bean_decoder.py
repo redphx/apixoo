@@ -1,5 +1,4 @@
 import json
-from abc import ABC
 from enum import Enum
 from io import IOBase
 from struct import unpack
