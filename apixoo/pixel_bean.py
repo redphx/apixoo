@@ -42,22 +42,44 @@ class PixelBean(object):
         self._palettes = palettes
         self._frames_data = frames_data
 
-    def save_to_gif(self, output_path: str, scale: int = 1) -> None:
+    def save_to_gif(
+        self,
+        output_path: str,
+        scale: int | float = 1,
+        width: int = None,
+        height: int = None,
+    ) -> None:
         gif_frames = []
 
-        idx = 0
-        for current_frame, frame_data in enumerate(self._frames_data):
-            img = Image.new('RGBA', (self._column_count * 16, self._row_count * 16))
+        org_width = self._column_count * 16
+        org_height = self._row_count * 16
+
+        for _, frame_data in enumerate(self._frames_data):
+            img = Image.new('RGBA', (org_width, org_height))
             for y in range(self._row_count * 16):
                 for x in range(self.column_count * 16):
                     palette_index = frame_data[y][x]
                     rgb = self._palettes[palette_index]
                     img.putpixel((x, y), rgb)
 
-            img = img.resize((img.width * scale, img.height * scale), Image.NEAREST)
-            idx += 1
+            # Scale image
+            if scale != 1:
+                width = round(img.width * scale)
+                height = round(img.height * scale)
+            else:
+                # Set specific width/height
+                if width and not height:
+                    height = round((width * org_height) / org_width)
+                elif height and not width:
+                    width = round((height * org_width) / org_height)
+
+            # Resize image if needed
+            if width != org_width and height != org_height:
+                img = img.resize((width, height), Image.NEAREST)
+
             gif_frames.append(img)
 
+        # Save to GIF
         gif_frames[0].save(
             output_path,
             append_images=gif_frames[1:],
