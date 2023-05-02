@@ -19,13 +19,18 @@ status = api.log_in()
 if not status:
     print('Login error!')
 else:
-      files = api.get_category_files(GalleryCategory.RECOMMEND, dimension=GalleryDimension.W64H64, page=page, per_page=20)
+    files = api.get_category_files(
+        GalleryCategory.RECOMMEND,
+        dimension=GalleryDimension.W64H64,
+        page=page,
+        per_page=20,
+    )
 
-      for info in files:
-          print(info)
-          pixel_bean = api.download(info)
-          if pixel_bean:
-              pixel_bean.save_to_gif(f'{info.gallery_id}.gif', scale=5)
+    for info in files:
+        print(info)
+        pixel_bean = api.download(info)
+        if pixel_bean:
+            pixel_bean.save_to_gif(f'{info.gallery_id}.gif', scale=5)
 ```
 
 *To be updated...*  
