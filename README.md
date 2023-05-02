@@ -27,7 +27,7 @@ else:
     files = api.get_category_files(
         GalleryCategory.RECOMMEND,
         dimension=GalleryDimension.W64H64,
-        page=page,
+        page=1,
         per_page=20,
     )
 
