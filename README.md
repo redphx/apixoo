@@ -5,6 +5,10 @@ Unlike other libraries, this one will only focus on interacting with Divoom Pixo
 
 - Support decoding Divoom's animation formats to GIFs (16x16, 32x32, 64x64).  
 
+## Install
+```
+pip install APIxoo
+```
 
 ## Example
 ```python
