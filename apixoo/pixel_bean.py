@@ -83,7 +83,7 @@ class PixelBean(object):
         gif_frames[0].save(
             output_path,
             append_images=gif_frames[1:],
-            duration=(1000 / self._speed),
+            duration=self._speed,
             save_all=True,
             optimize=False,
             interlace=False,
