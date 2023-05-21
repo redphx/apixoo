@@ -43,8 +43,14 @@ class APIxoo(object):
         protocol = 'https://' if self._is_secure else 'http://'
         return '%s%s%s' % (protocol, server.value, path)
 
-    def _send_request(self, endpoint: ApiEndpoint, payload: dict, auth: bool = False):
+    def _send_request(self, endpoint: ApiEndpoint, payload: dict = {}):
         """Send request to API server"""
+        if endpoint != ApiEndpoint.USER_LOGIN:
+            payload.update({
+                'Token': self._user['token'],
+                'UserId': self._user['user_id'],
+            })
+
         full_url = self._full_url(endpoint.value, Server.API)
         resp = requests.post(
             full_url,
@@ -73,7 +79,7 @@ class APIxoo(object):
         }
 
         try:
-            resp_json = self._send_request(ApiEndpoint.USER_LOGIN, payload, auth=False)
+            resp_json = self._send_request(ApiEndpoint.USER_LOGIN, payload)
             self._user = {
                 'user_id': resp_json['UserId'],
                 'token': resp_json['Token'],
@@ -90,8 +96,6 @@ class APIxoo(object):
             raise Exception('Not logged in!')
 
         payload = {
-            'Token': self._user['token'],
-            'UserId': self._user['user_id'],
             'GalleryId': gallery_id,
         }
 
@@ -123,8 +127,6 @@ class APIxoo(object):
         end_num = start_num + per_page - 1
 
         payload = {
-            'Token': self._user['token'],
-            'UserId': self._user['user_id'],
             'StartNum': start_num,
             'EndNum': end_num,
             'Classify': category,
