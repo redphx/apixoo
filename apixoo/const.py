@@ -66,6 +66,7 @@ class Server(str, Enum):
 
 class ApiEndpoint(str, Enum):
     GET_ALBUM_LIST = '/Discover/GetAlbumList'
+    GET_ALBUM_FILES = '/Discover/GetAlbumImageList'
     GET_CATEGORY_FILES = '/GetCategoryFileListV2'
     GET_GALLERY_INFO = '/Cloud/GalleryInfo'
     USER_LOGIN = '/UserLogin'

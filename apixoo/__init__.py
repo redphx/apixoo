@@ -21,7 +21,9 @@ class APIxoo(object):
         'User-Agent': 'Aurabox/3.1.10 (iPad; iOS 14.8; Scale/2.00)',
     }
 
-    def __init__(self, email: str, password: str = None, md5_password: str = None, is_secure=True):
+    def __init__(
+        self, email: str, password: str = None, md5_password: str = None, is_secure=True
+    ):
         # Make sure at least one password param is passed
         if not any([password, md5_password]):
             raise Exception('Empty password!')
@@ -47,10 +49,12 @@ class APIxoo(object):
     def _send_request(self, endpoint: ApiEndpoint, payload: dict = {}):
         """Send request to API server"""
         if endpoint != ApiEndpoint.USER_LOGIN:
-            payload.update({
-                'Token': self._user['token'],
-                'UserId': self._user['user_id'],
-            })
+            payload.update(
+                {
+                    'Token': self._user['token'],
+                    'UserId': self._user['user_id'],
+                }
+            )
 
         full_url = self._full_url(endpoint.value, Server.API)
         resp = requests.post(
@@ -120,7 +124,7 @@ class APIxoo(object):
         page: int = 1,
         per_page: int = 20,
     ) -> list:
-        """Get a list of galleries by category"""
+        """Get a list of galleries by Category"""
         if not self.is_logged_in():
             raise Exception('Not logged in!')
 
@@ -162,6 +166,28 @@ class APIxoo(object):
             lst = []
             for item in resp_json['AlbumList']:
                 lst.append(AlbumInfo(item))
+
+            return lst
+        except Exception:
+            return None
+
+    def get_album_files(self, album_id: int, page: int = 1, per_page: int = 20):
+        """Get a list of galleries by Album"""
+        start_num = ((page - 1) * per_page) + 1
+        end_num = start_num + per_page - 1
+
+        payload = {
+            'AlbumId': album_id,
+            'StartNum': start_num,
+            'EndNum': end_num,
+        }
+
+        try:
+            resp_json = self._send_request(ApiEndpoint.GET_ALBUM_FILES, payload)
+
+            lst = []
+            for item in resp_json['FileList']:
+                lst.append(GalleryInfo(item))
 
             return lst
         except Exception:
