@@ -8,7 +8,7 @@ required = ['requests']
 
 setup(
     name='APIxoo',
-    version="0.1.1",
+    version="0.2.0",
     author="redphx",
     license="MIT",
     url="https://github.com/redphx/apixoo",
