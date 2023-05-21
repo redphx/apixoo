@@ -20,7 +20,7 @@ class APIxoo(object):
         'User-Agent': 'Aurabox/3.1.10 (iPad; iOS 14.8; Scale/2.00)',
     }
 
-    def __init__(self, email: str, password: str = None, md5_password: str = None):
+    def __init__(self, email: str, password: str = None, md5_password: str = None, is_secure=True):
         # Make sure at least one password param is passed
         if not any([password, md5_password]):
             raise Exception('Empty password!')
@@ -33,13 +33,15 @@ class APIxoo(object):
         self._md5_password = md5_password
         self._user = None
         self._request_timeout = 10
+        self._is_secure = is_secure
 
     def _full_url(self, path: str, server: Server = Server.API) -> str:
         """Generate full URL from path"""
         if not path.startswith('/'):
             path = '/' + path
 
-        return server + path
+        protocol = 'https://' if self._is_secure else 'http://'
+        return '%s%s%s' % (protocol, server.value, path)
 
     def _send_request(self, endpoint: ApiEndpoint, payload: dict, auth: bool = False):
         """Send request to API server"""

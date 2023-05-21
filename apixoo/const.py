@@ -60,8 +60,8 @@ class GalleryDimension(int, Enum):
 
 
 class Server(str, Enum):
-    API = 'https://app.divoom-gz.com'
-    FILE = 'https://f.divoom-gz.com'
+    API = 'app.divoom-gz.com'
+    FILE = 'f.divoom-gz.com'
 
 
 class BaseDictInfo(dict):
