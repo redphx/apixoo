@@ -1,7 +1,5 @@
 from enum import Enum
 
-REQUESTS_TIMEOUT = 10
-
 
 class GalleryCategory(int, Enum):
     NEW = 0
@@ -82,6 +80,12 @@ class UserInfo(dict):
 
     def __setattr__(self, name, value):
         raise Exception('UserInfo object is read only!')
+
+
+class ApiEndpoint(str, Enum):
+    GET_CATEGORY_FILES = '/GetCategoryFileListV2'
+    GET_GALLERY_INFO = '/Cloud/GalleryInfo'
+    USER_LOGIN = '/UserLogin'
 
 
 class GalleryInfo(dict):

@@ -3,7 +3,7 @@ import hashlib
 import requests
 
 from .const import (
-    REQUESTS_TIMEOUT,
+    ApiEndpoint,
     GalleryCategory,
     GalleryDimension,
     GalleryInfo,
@@ -32,12 +32,26 @@ class APIxoo(object):
         self._email = email
         self._md5_password = md5_password
         self._user = None
+        self._request_timeout = 10
 
     def _full_url(self, path: str, server: Server = Server.API) -> str:
         if not path.startswith('/'):
             path = '/' + path
 
         return server + path
+
+    def _send_request(self, endpoint: ApiEndpoint, payload: dict, auth: bool = False):
+        full_url = self._full_url(endpoint.value, Server.API)
+        resp = requests.post(
+            full_url,
+            headers=self.HEADERS,
+            json=payload,
+            timeout=self._request_timeout,
+        )
+        return resp.json()
+
+    def set_timeout(self, timeout: int):
+        self._request_timeout = timeout
 
     def is_logged_in(self) -> bool:
         return self._user is not None
@@ -52,20 +66,12 @@ class APIxoo(object):
         }
 
         try:
-            resp = requests.post(
-                self._full_url('/UserLogin'),
-                headers=self.HEADERS,
-                json=payload,
-                timeout=REQUESTS_TIMEOUT,
-            )
-            resp_json = resp.json()
-            return_code = resp_json.get('ReturnCode')
-            if return_code == 0:
-                self._user = {
-                    'user_id': resp_json['UserId'],
-                    'token': resp_json['Token'],
-                }
-                return True
+            resp_json = self._send_request(ApiEndpoint.USER_LOGIN, payload, auth=False)
+            self._user = {
+                'user_id': resp_json['UserId'],
+                'token': resp_json['Token'],
+            }
+            return True
         except Exception:
             pass
 
@@ -81,19 +87,16 @@ class APIxoo(object):
             'GalleryId': gallery_id,
         }
 
-        resp = requests.post(
-            self._full_url('/Cloud/GalleryInfo'),
-            headers=self.HEADERS,
-            json=payload,
-            timeout=REQUESTS_TIMEOUT,
-        )
-        resp_json = resp.json()
-        if resp_json['ReturnCode'] != 0:
-            return None
+        try:
+            resp_json = self._send_request(ApiEndpoint.GET_GALLERY_INFO, payload)
+            if resp_json['ReturnCode'] != 0:
+                return None
 
-        # Add gallery ID since it isn't included in the response
-        resp_json['GalleryId'] = gallery_id
-        return GalleryInfo(resp_json)
+            # Add gallery ID since it isn't included in the response
+            resp_json['GalleryId'] = gallery_id
+            return GalleryInfo(resp_json)
+        except Exception:
+            return None
 
     def get_category_files(
         self,
@@ -123,24 +126,20 @@ class APIxoo(object):
             'RefreshIndex': 0,
         }
 
-        resp = requests.post(
-            self._full_url('/GetCategoryFileListV2'),
-            headers=self.HEADERS,
-            json=payload,
-            timeout=REQUESTS_TIMEOUT,
-        )
-        resp_json = resp.json()
+        try:
+            resp_json = self._send_request(ApiEndpoint.GET_CATEGORY_FILES, payload)
 
-        lst = []
-        for item in resp_json['FileList']:
-            lst.append(GalleryInfo(item))
+            lst = []
+            for item in resp_json['FileList']:
+                lst.append(GalleryInfo(item))
 
-        return lst
+            return lst
+        except Exception:
+            return None
 
     def download(self, gallery_info: GalleryInfo) -> PixelBean:
         url = self._full_url(gallery_info.file_id, server=Server.FILE)
         resp = requests.get(
-            url, headers=self.HEADERS, stream=True, timeout=REQUESTS_TIMEOUT
+            url, headers=self.HEADERS, stream=True, timeout=self._request_timeout
         )
-        print(url)
         return PixelBeanDecoder.decode_stream(resp.raw)
