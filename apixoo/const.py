@@ -64,22 +64,26 @@ class Server(str, Enum):
     FILE = 'https://f.divoom-gz.com'
 
 
-class UserInfo(dict):
-    KEYS_MAP = {
-        'UserId': 'user_id',
-        'UserName': 'user_name',
-    }
+class BaseDictInfo(dict):
+    _KEYS_MAP = {}
 
     def __init__(self, info: dict):
         # Rename keys
-        for key in self.KEYS_MAP:
-            self.__dict__[self.KEYS_MAP[key]] = info.get(key)
+        for key in self._KEYS_MAP:
+            self.__dict__[self._KEYS_MAP[key]] = info.get(key)
 
         # Make this object JSON serializable
         dict.__init__(self, **self.__dict__)
 
     def __setattr__(self, name, value):
-        raise Exception('UserInfo object is read only!')
+        raise Exception('%s object is read only!' % (type(self).__name__))
+
+
+class UserInfo(BaseDictInfo):
+    _KEYS_MAP = {
+        'UserId': 'user_id',
+        'UserName': 'user_name',
+    }
 
 
 class ApiEndpoint(str, Enum):
@@ -88,8 +92,8 @@ class ApiEndpoint(str, Enum):
     USER_LOGIN = '/UserLogin'
 
 
-class GalleryInfo(dict):
-    KEYS_MAP = {
+class GalleryInfo(BaseDictInfo):
+    _KEYS_MAP = {
         'Classify': 'category',
         'CommentCnt': 'total_comments',
         'Content': 'content',
@@ -129,17 +133,12 @@ class GalleryInfo(dict):
     }
 
     def __init__(self, info: dict):
-        # Rename keys
-        for key in self.KEYS_MAP:
-            self.__dict__[self.KEYS_MAP[key]] = info.get(key)
+        super().__init__(info)
 
         # Parse user info
         self.__dict__['user'] = None
         if 'UserId' in info:
             self.__dict__['user'] = UserInfo(info)
 
-        # Make this object JSON serializable
+        # Update dict
         dict.__init__(self, **self.__dict__)
-
-    def __setattr__(self, name, value):
-        raise Exception('GalleryInfo object is read only!')
