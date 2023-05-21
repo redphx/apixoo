@@ -1,8 +1,4 @@
 # [WIP] APIxoo
-[![release][release-badge]][release-url]
-![downloads][downloads-badge]
-![build][build-badge]
-  
 Python module to interact with Divoom Pixoo app's server. .  
   
 Unlike other libraries, this one will only focus on interacting with Divoom Pixoo's server.  
