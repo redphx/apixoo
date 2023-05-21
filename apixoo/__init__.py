@@ -35,12 +35,14 @@ class APIxoo(object):
         self._request_timeout = 10
 
     def _full_url(self, path: str, server: Server = Server.API) -> str:
+        """Generate full URL from path"""
         if not path.startswith('/'):
             path = '/' + path
 
         return server + path
 
     def _send_request(self, endpoint: ApiEndpoint, payload: dict, auth: bool = False):
+        """Send request to API server"""
         full_url = self._full_url(endpoint.value, Server.API)
         resp = requests.post(
             full_url,
@@ -51,12 +53,15 @@ class APIxoo(object):
         return resp.json()
 
     def set_timeout(self, timeout: int):
+        """Set request timeout"""
         self._request_timeout = timeout
 
     def is_logged_in(self) -> bool:
+        """Check if logged in or not"""
         return self._user is not None
 
     def log_in(self) -> bool:
+        """Log in to API server"""
         if self.is_logged_in():
             return True
 
@@ -78,6 +83,7 @@ class APIxoo(object):
         return False
 
     def get_gallery_info(self, gallery_id: int) -> GalleryInfo:
+        """Get gallery info by ID"""
         if not self.is_logged_in():
             raise Exception('Not logged in!')
 
@@ -107,6 +113,7 @@ class APIxoo(object):
         page: int = 1,
         per_page: int = 20,
     ) -> list:
+        """Get a list of galleries by category"""
         if not self.is_logged_in():
             raise Exception('Not logged in!')
 
@@ -138,6 +145,7 @@ class APIxoo(object):
             return None
 
     def download(self, gallery_info: GalleryInfo) -> PixelBean:
+        """Download and decode animation"""
         url = self._full_url(gallery_info.file_id, server=Server.FILE)
         resp = requests.get(
             url, headers=self.HEADERS, stream=True, timeout=self._request_timeout

@@ -49,6 +49,7 @@ class PixelBean(object):
         width: int = None,
         height: int = None,
     ) -> None:
+        """Convert animation to GIF file"""
         gif_frames = []
 
         org_width = self._column_count * 16

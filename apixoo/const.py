@@ -23,7 +23,7 @@ class GalleryCategory(int, Enum):
     REVIEW_PHOTOS = 21
     REVIEW_STOLEN_PHOTOS = 22
     FILL_GAME = 29
-    PIXEL_MATCH = 30
+    PIXEL_MATCH = 30  # Current event
     PLANT = 31
     ANIMAL = 32
     PERSON = 33
