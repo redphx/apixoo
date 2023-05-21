@@ -64,6 +64,13 @@ class Server(str, Enum):
     FILE = 'f.divoom-gz.com'
 
 
+class ApiEndpoint(str, Enum):
+    GET_ALBUM_LIST = '/Discover/GetAlbumList'
+    GET_CATEGORY_FILES = '/GetCategoryFileListV2'
+    GET_GALLERY_INFO = '/Cloud/GalleryInfo'
+    USER_LOGIN = '/UserLogin'
+
+
 class BaseDictInfo(dict):
     _KEYS_MAP = {}
 
@@ -79,17 +86,20 @@ class BaseDictInfo(dict):
         raise Exception('%s object is read only!' % (type(self).__name__))
 
 
+class AlbumInfo(BaseDictInfo):
+    _KEYS_MAP = {
+        'AlbumId': 'album_id',
+        'AlbumName': 'album_name',
+        'AlbumImageId': 'album_image_id',
+        'AlbumBigImageId': 'album_big_image_id',
+    }
+
+
 class UserInfo(BaseDictInfo):
     _KEYS_MAP = {
         'UserId': 'user_id',
         'UserName': 'user_name',
     }
-
-
-class ApiEndpoint(str, Enum):
-    GET_CATEGORY_FILES = '/GetCategoryFileListV2'
-    GET_GALLERY_INFO = '/Cloud/GalleryInfo'
-    USER_LOGIN = '/UserLogin'
 
 
 class GalleryInfo(BaseDictInfo):

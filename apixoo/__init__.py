@@ -3,6 +3,7 @@ import hashlib
 import requests
 
 from .const import (
+    AlbumInfo,
     ApiEndpoint,
     GalleryCategory,
     GalleryDimension,
@@ -143,6 +144,24 @@ class APIxoo(object):
             lst = []
             for item in resp_json['FileList']:
                 lst.append(GalleryInfo(item))
+
+            return lst
+        except Exception:
+            return None
+
+    def get_album_list(self) -> list:
+        """Get Album list in Discover tab"""
+        if not self.is_logged_in():
+            raise Exception('Not logged in!')
+
+        try:
+            resp_json = self._send_request(ApiEndpoint.GET_ALBUM_LIST)
+            if resp_json['ReturnCode'] != 0:
+                return None
+
+            lst = []
+            for item in resp_json['AlbumList']:
+                lst.append(AlbumInfo(item))
 
             return lst
         except Exception:
