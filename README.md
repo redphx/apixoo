@@ -1,12 +1,22 @@
 [![PyPI](https://img.shields.io/pypi/v/APIxoo?label=PyPI%20Package)](https://pypi.org/project/APIxoo/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-# [WIP] APIxoo
+# APIxoo
 Python module to interact with Divoom Pixoo app's server.  
 
 Unlike other libraries, this one will only focus on interacting with Divoom Pixoo's server.  
 
-- Support decoding Divoom's animation formats to GIFs (16x16, 32x32, 64x64).  
+## Features
+- [x] Login
+- [x] Decode Divoom's animation formats to GIFs (16x16, 32x32, 64x64).  
+- [x] Get animation by ID
+- [x] Get animations by Category
+- [x] Get animations by Album
+- [ ] Get animations by User
+- [ ] Search animations & users
+- [ ] Like/Dislike animation
+- [ ] Comment on animation
+- [ ] Upload animations
 
 ## Install
 ```
