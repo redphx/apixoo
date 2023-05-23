@@ -2,9 +2,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 # APIxoo
-Python module to interact with Divoom Pixoo app's server.  
-
-Unlike other libraries, this one will only focus on interacting with Divoom Pixoo's server.  
+Python package to interact with Divoom Pixoo app's server.  
+Unlike other packages, this one will only focus on interacting with Divoom Pixoo's server.  
+  
+For ESP32/Arduino, check [redphx/DivoomClient](https://github.com/redphx/DivoomClient). 
 
 ## Features
 - [x] Login
