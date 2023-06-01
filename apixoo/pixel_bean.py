@@ -46,8 +46,8 @@ class PixelBean(object):
         self,
         output_path: str,
         scale: int | float = 1,
-        width: int = None,
-        height: int = None,
+        target_width: int = None,
+        target_height: int = None,
     ) -> None:
         """Convert animation to GIF file"""
         gif_frames = []
@@ -56,26 +56,33 @@ class PixelBean(object):
         org_height = self._row_count * 16
 
         for _, frame_data in enumerate(self._frames_data):
-            img = Image.new('RGBA', (org_width, org_height))
+            img = Image.new('RGB', (org_width, org_height))
             for y in range(self._row_count * 16):
                 for x in range(self.column_count * 16):
                     palette_index = frame_data[y][x]
                     rgb = self._palettes[palette_index]
                     img.putpixel((x, y), rgb)
 
-            # Scale image
+            width = org_width
+            height = org_height
+
             if scale != 1:
-                width = round(img.width * scale)
-                height = round(img.height * scale)
-            else:
+                width = round(width * scale)
+                height = round(height * scale)
+            elif target_width or target_height:
                 # Set specific width/height
-                if width and not height:
-                    height = round((width * org_height) / org_width)
-                elif height and not width:
-                    width = round((height * org_width) / org_height)
+                if target_width and target_height:
+                    width = target_width
+                    height = target_height
+                elif target_width and not target_height:
+                    width = target_width
+                    height = round((target_width * org_height) / org_width)
+                elif target_height and not target_width:
+                    width = round((target_height * org_width) / org_height)
+                    height = target_height
 
             # Resize image if needed
-            if width != org_width and height != org_height:
+            if width != org_width or height != org_height:
                 img = img.resize((width, height), Image.NEAREST)
 
             gif_frames.append(img)
