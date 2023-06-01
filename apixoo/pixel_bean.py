@@ -1,3 +1,5 @@
+from typing import Union
+
 from PIL import Image
 
 
@@ -45,7 +47,7 @@ class PixelBean(object):
     def save_to_gif(
         self,
         output_path: str,
-        scale: int | float = 1,
+        scale: Union[int, float] = 1,
         target_width: int = None,
         target_height: int = None,
     ) -> None:

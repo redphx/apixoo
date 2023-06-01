@@ -1,4 +1,5 @@
 import hashlib
+from typing import Union
 
 import requests
 
@@ -117,7 +118,7 @@ class APIxoo(object):
 
     def get_category_files(
         self,
-        category: int | GalleryCategory,
+        category: Union[int, GalleryCategory],
         dimension: GalleryDimension = GalleryDimension.W32H32,
         sort: GallerySorting = GallerySorting.MOST_LIKED,
         file_type: GalleryType = GalleryType.ALL,
