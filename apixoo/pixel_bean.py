@@ -130,7 +130,7 @@ class PixelBean(object):
 
         for frame_number in range(self._total_frames):
             img = self.get_frame_image(
-                frame_number,
+                frame_number + 1,
                 scale=scale,
                 target_width=target_width,
                 target_height=target_height,
