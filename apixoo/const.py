@@ -4,7 +4,7 @@ from enum import Enum
 class GalleryCategory(int, Enum):
     NEW = 0
     DEFAULT = 1
-    LED_TEXT = 2
+    # LED_TEXT = 2
     CHARACTER = 3
     EMOJI = 4
     DAILY = 5
@@ -18,20 +18,20 @@ class GalleryCategory(int, Enum):
     BUSINESS = 16
     FESTIVAL = 17
     RECOMMEND = 18
-    PLANET = 19
+    # PLANET = 19
     FOLLOW = 20
-    REVIEW_PHOTOS = 21
-    REVIEW_STOLEN_PHOTOS = 22
-    FILL_GAME = 29
+    # REVIEW_PHOTOS = 21
+    # REVIEW_STOLEN_PHOTOS = 22
+    # FILL_GAME = 29
     PIXEL_MATCH = 30  # Current event
     PLANT = 31
     ANIMAL = 32
     PERSON = 33
     EMOJI_2 = 34
     FOOD = 35
-    OTHERS = 36
-    REPORT_PHOTO = 254
-    CREATION_ALBUM = 255
+    # OTHERS = 36
+    # REPORT_PHOTO = 254
+    # CREATION_ALBUM = 255
 
 
 class GalleryType(int, Enum):
